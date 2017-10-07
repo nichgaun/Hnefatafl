@@ -30,16 +30,20 @@ class game_board:
 		return self.under_board[x][y] == 'G' or self.under_board[x][y] == 'g'
 
 	def is_capping (self, x, y, dx, dy):
-				
-		if (self.is_red(x, y) == self.is_red(x+dx, y+dy) or self.is_red(x+dx, y+dy) == self.is_red(x+dx, y+dy)):
-			print ("no cap on own pieces")
-			return 0
+		if (self.is_red(x, y) and self.is_red(x+dx,y+dx)):
+			print("red cant cap red")
+			return 0		
 
-		if (self.is_red(x, y) == self.is_red(x+2*dx, y+2*dy)):
+		if (self.is_green(x, y) and self.is_green(x+dx,y+dx)):
+			print("green cant cap green")
+			return 0		
+
+
+		if (self.is_red(x, y) and self.is_red(x+2*dx, y+2*dy)):
 			print ("sandwiched by red")
 			return 1
 		
-		if (self.is_green(x, y) == self.is_green(x+2*dx, y+2*dy)):
+		if (self.is_green(x, y) and self.is_green(x+2*dx, y+2*dy)):
 			print ("sandwiched by green")
 			return 1
 		
@@ -69,23 +73,17 @@ class game_board:
 			print("moving to an x space not as king")
 			return 0
 
-		#swap with board variable
-		pi = 0
-		pf = 0
-		isx = 1
 
 		if (xi == xf):
-			pi = yi
-			pf = yf
-		else:	
-			pi = xi
-			pf = xf
-			isx = 0
-
-		for i in range (pf, pi):
-			if ((self.piece_board[i][pi] != ' ' and isx) or (self.piece_board[pi][i] != ' ' and not isx)):
-				print("piece in the way at", pi, i, isx)
-				return 0
+			for i in range (yf, yi, (1,-1)[bool(yf-yi)]):
+				if (self.piece_board[xi][i] != ' '):
+					print("piece in the way at", xi, i)
+					return 0
+		if (yi == yf):
+			for i in range (xf, xi, (1,-1)[bool(xf-xi)]):
+				if (self.piece_board[i][yi] != ' '):
+					print("piece in the way at", i, yi)
+					return 0
 		
 		self.piece_board[xf][yf] = self.piece_board[xi][yi]
 
@@ -114,6 +112,6 @@ class game_board:
 					self.win(0)
 				self.piece_board[xf][yf-1] = ' '
 		
-		self.piece_board[xi][yi] = ' '
+		self.piece_board[xi][yi] = '0'
 		
 		return 1
