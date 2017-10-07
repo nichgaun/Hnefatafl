@@ -1,23 +1,23 @@
 #returns 1 on a successful move, 0 on unsuccessful
-def is_red (int x, int y)
+def is_red (x, y):
 	return board[x][y] == 'r'
 
-def is_green (int x, int y)
+def is_green (x, y):
 	return board[x][y] == 'G' or board[x][y] == 'g'
 
-def is_capping (int xi, int yi, int xf, int yf)
-	if (is_red(xi, yi) != is_red(xf, yf) and under_board[xf][yf] != 'x')
+def is_capping (xi, yi, xf, yf):
+	if (is_red(xi, yi) != is_red(xf, yf) and under_board[xf][yf] != 'x'):
 		return 0
 
-	if (is_green(xi, yi) != is_green(xf, yf) and under_board[xf][yf] != 'x')
+	if (is_green(xi, yi) != is_green(xf, yf) and under_board[xf][yf] != 'x'):
 		return 0
 
 	return 1	
 
-def is_x_space (int x, int y)
+def is_x_space (x, y):
 	return under_board[x][y] == 'y' or under_board[x][y] == 'x'
 
-def move (int xi, int yi, int xf, int yf)
+def move (xi, yi, xf, yf):
 	if (xi != xf or yi != yf):
 		return 0
 
@@ -25,8 +25,8 @@ def move (int xi, int yi, int xf, int yf)
 		return 0
 
 	#swap with board variable
-	int pi, pf
-	bool isx = 1
+	pi, pf
+	isx = 1
 
 	if (xi == xf):
 		pi = yi
@@ -37,7 +37,7 @@ def move (int xi, int yi, int xf, int yf)
 		isx = 0
 
 	for i in range (pi, pf):
-		if (i != pi or (board[pi][i] != ' ' and isx) or (board[i][pi] != ' ' and !isx))
+		if (i != pi or (board[pi][i] != ' ' and isx) or (board[i][pi] != ' ' and not isx)):
 			return 0
 	
 	board[xf][yf] = board[xi][yf]
