@@ -35,34 +35,34 @@ class game_board:
 		self.BOARD_SIZE = 11
 
 	def is_red (self, x, y):
-		return self.under_board[x][y] == 'r'
+		return self.piece_board[x][y] == 'r'
 
 	def is_green (self, x, y):
-		return self.under_board[x][y] == 'G' or self.under_board[x][y] == 'g'
+		return self.piece_board[x][y] == 'G' or self.piece_board[x][y] == 'g'
 
 	def is_capping (self, x, y, dx, dy):
-		if (self.is_red(x, y) and self.is_red(x+dx,y+dx)):
-			print("red cant cap red")
+		if (self.is_red(x, y) and self.is_red(x+dx,y+dy)):
+			# print("red cant cap red")
 			return 0		
 
-		if (self.is_green(x, y) and self.is_green(x+dx,y+dx)):
-			print("green cant cap green")
+		if (self.is_green(x, y) and self.is_green(x+dx,y+dy)):
+			# print("green cant cap green")
 			return 0		
 
 
-		if (self.is_red(x, y) and self.is_red(x+2*dx, y+2*dy)):
+		if (self.is_red(x, y) and self.is_red(x+2*dx, y+2*dy) and self.is_green(x+dx, y+dy)):
 			print ("sandwiched by red")
 			return 1
 		
-		if (self.is_green(x, y) and self.is_green(x+2*dx, y+2*dy)):
+		if (self.is_green(x, y) and self.is_green(x+2*dx, y+2*dy) and self.is_red(x+dx, y+dy)):
 			print ("sandwiched by green")
 			return 1
 		
-		if ('x' == self.under_board[x+2*dx][y+2*dy]):
+		if ('x' == self.under_board[x+2*dx][y+2*dy] and self.piece_board[x+dx][y+dy] != ' '):
 			print ("sandwiched by x space")
 			return 1
 		
-		print("no cap")
+		# print("no cap")
 		return 0	
 
 	def win (self, is_green):
@@ -84,7 +84,7 @@ class game_board:
 			print("moving to an x space not as king")
 			return 0
 
-
+		# TODO: fix these loops, I don't think they check the correct spaces if any
 		if (xi == xf):
 			for i in range (yf, yi, (1,-1)[bool(yf-yi)]):
 				if (self.piece_board[xi][i] != ' '):
@@ -97,11 +97,13 @@ class game_board:
 					return 0
 		
 		self.piece_board[xf][yf] = self.piece_board[xi][yi]
+		self.piece_board[xi][yi] = ' '
 
-		if (self.piece_board[xi][yi] == 'G' and self.under_board[xf][yf] == 'x'):
+		if (self.piece_board[xf][yf] == 'G' and self.under_board[xf][yf] == 'x'):
 			self.win(1)
 			return 1
 
+		# Doesn't currently check if capped against a wall
 		if (xf + 2 < self.BOARD_SIZE):
 			if (self.is_capping(xf, yf, 1, 0)):
 				if (self.piece_board[xf+1][yf] == 'G'):
@@ -123,6 +125,15 @@ class game_board:
 					self.win(0)
 				self.piece_board[xf][yf-1] = ' '
 		
-		self.piece_board[xi][yi] = '0'
-		
 		return 1
+
+if __name__ == "__main__":
+	g = game_board()
+	g.move(0, 3, 4, 3)
+	g.move(10, 3, 6, 3)
+	g.move(5, 4, 5, 3)
+	g.move(6, 4, 9, 4)
+	g.move(5, 5, 5, 4)
+	g.move(5, 4, 8, 4)
+	g.move(8, 4, 8, 0)
+	g.move(8, 0, 10, 0)
