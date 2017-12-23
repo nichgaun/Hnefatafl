@@ -1,1 +1,98 @@
-Something useless here now!
+Hnefatafl is an old viking board game that has many rule variations. What
+follows are the rules used in this implementation. In short this is Fetlar
+Hnefatafl.
+
+Pieces:
+There are two teams, red and green. Red are the attackers (r) with their pieces
+initially at the edges of the board. Green are the defenders and are comprised
+of 12 green pieces (g) and a king (G). Red moves first.
+
+Board:
+11x11 board with 5 special tiles: each of the 4 corners (x) (escapes) and the
+center tile (y) (throne) where the king starts the game.
+
+Movement:
+All pieces, including the king, move as rooks do in Chess. No piece except the
+king can occupy the special tiles. However pieces can move through the throne
+tile.
+
+Capture:
+A normal piece is captured if, by an aggressor, a piece is sandwiched between
+two pieces of the opposing side e.g.
+
+--before
+r,g, , ,r,
+
+--after movement
+r,g,r, , ,
+
+--capture
+r, ,r, , ,
+
+However, if a piece moves between two members of the opposing side it is not
+captured.
+
+--before
+r, ,r, ,
+ , , , ,
+ ,g, , ,
+
+--after movement, no capture
+r,g,r, ,
+ , , , ,
+ , , , ,
+
+ For the king to be captured he must be surrounded on all 4 sides by the enemy
+ (enclosure) e.g.
+
+--before
+  ,r, , ,
+ r,G,r, ,
+  , , , ,
+  ,r, , ,
+
+ --after movement
+  ,r, , ,
+ r,G,r, ,
+  ,r, , ,
+  , , , ,
+
+ --capture
+  ,r, , ,
+ r, ,r, ,
+  ,r, , ,
+  , , , ,
+
+The king is also captured if he is one space from his throne and surrounded on
+all 3 other sides by the enemy. The king is not captured if he is against a
+wall surrounded on three sides by the enemy (though he is unable to move).
+
+
+For the purpose of capturing, the escapes act as a hostile piece to either
+team. The throne, when unoccupied by the king, acts as a hostile piece as well.
+
+--before
+ x,g, , ,
+  , , , ,
+  , , , ,
+  , ,r, ,
+
+ --after movement
+ x,g,r, ,
+  , , , ,
+  , , , ,
+  , , , ,
+
+ --capture
+ x, ,r, ,
+  , , , ,
+  , , , ,
+  , , , ,
+
+When a piece is captured it is removed from the board like standard piece
+capture board games.
+
+Victory:
+For the defenders to win, they must get the king to one of the 4 escapes. For
+the attackers, they must capture the king. Either team loses if they are unable
+to move a piece.
